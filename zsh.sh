@@ -16,22 +16,29 @@ echo $PASSWORD | sudo usermod -aG docker $USER && newgrp docker
 
 # ----------------------------- ZINIT-CONFIG ----------------------------- #
 
-sh -c "$(curl -fsSL https://git.io/zinit-install)"
-echo -e "zinit light zsh-users/zsh-autosuggestions\nzinit light zsh-users/zsh-completions\nzinit light zdharma-continuum/fast-syntax-highlighting" >> ~/.zshrc
+if ! zinit zstatus; then
+    sh -c "$(curl -fsSL https://git.io/zinit-install)"
+    echo -e "zinit light zsh-users/zsh-autosuggestions\nzinit light zsh-users/zsh-completions\nzinit light zdharma-continuum/fast-syntax-highlighting" >> ~/.zshrc
+fi
 
 # ----------------------------- ASDF-CONFIG ----------------------------- #
 
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0 
-echo ". $""HOME/.asdf/asdf.sh" >> ~/.zshrc
-echo -e "fpath=($""{ASDF_DIR}/completions $""fpath)\nautoload -Uz compinit && compinit" >> ~/.zshrc
-source ~/.zshrc
+if ! la $HOME | ".asdf"; then
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.9.0 
+    echo ". $""HOME/.asdf/asdf.sh" >> ~/.zshrc
+    echo -e "fpath=($""{ASDF_DIR}/completions $""fpath)\nautoload -Uz compinit && compinit" >> ~/.zshrc
+    source ~/.zshrc
+fi
 
 ### JAVA ###
-asdf plugin-add java
-asdf install java openjdk-16.0.2
-asdf install java adoptopenjdk-8.0.312+7
-asdf global java system
-echo ". ~/.asdf/plugins/java/set-java-home.zsh" >> ~/.zshrc
+
+if ! asdf list java; then 
+    asdf plugin-add java
+    asdf install java openjdk-16.0.2
+    asdf install java adoptopenjdk-8.0.312+7
+    asdf global java system
+    echo ". ~/.asdf/plugins/java/set-java-home.zsh" >> ~/.zshrc
+fi
 
 # ----------------------------- MYSQL-CONFIG ----------------------------- #
 
