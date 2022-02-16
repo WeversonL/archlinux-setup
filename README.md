@@ -4,11 +4,22 @@
 
 Script created in order to install and configure some tools used by me in Arch, either on the desktop or in WSL2. 
 
-> *   The first one to run must be the bash.sh file [responsible for installations]
+1. Clone the repository or download the source code
 
-> *   After the previous step, run zsh.sh [responsible for configurations and others]
 
-## Check the script before running!! If a module is not compatible with your hardware, or if you don't want that installation to be done.
+```
+git clone https://github.com/WeversonL/archlinux-setup.git 
+cd archlinux-setup
+
+
+```
+2. Run the script with sudo
+
+```
+sudo ./setup.sh
+```
+
+## Check the script before running!! If a module is not compatible with your hardware [I'm use NVIDIA and AMD], or if you don't want that installation to be done.
 
 ### Still in development
 
