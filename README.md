@@ -20,6 +20,7 @@ It can be changed for each case and need. Be aware if any module/driver is not c
 ## License
 
 `Arch Linux Setup` is released under the [GNU General Public License, Version 2](LICENSE)
+    
         Copyright (C) 2022 Weverson Lemos
 
         This program is free software; you can redistribute it and/or
