@@ -103,17 +103,6 @@ function execution(){
         return;;
     esac
 
-    ### YAY ###
-
-    echo "$NORMAL_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers ### Add user nopasswd in sudoers
-
-    install "yay"
-    su "$NORMAL_USER" -c "git clone $YAY_URL $YAY_DIRECTORY > /dev/null 2>&1"
-    su "$NORMAL_USER" -c "cd $YAY_DIRECTORY && makepkg -si --noconfirm > /dev/null 2>&1"
-    installed "yay"
-
-    sed -i '$d' /etc/sudoers ### Remove line added on sudoers file
-
     # ----------------------------- DOCKER-CONFIG ----------------------------- #
 
     if ! groups | grep docker > /dev/null 2>&1; then
@@ -128,7 +117,20 @@ function execution(){
     systemctl start mariadb
     mysql_secure_installation
 
+    # ----------------------------- CLEAN-CONFIG ----------------------------- #
+
     pacman -Rns "$(pacman -Qtdq)" --noconfirm > /dev/null 2>&1
+
+    # ----------------------------- YAY-INSTALL ----------------------------- #
+
+    echo "$NORMAL_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers ### Add user nopasswd in sudoers
+
+    install "yay"
+    su "$NORMAL_USER" -c "git clone $YAY_URL $YAY_DIRECTORY > /dev/null 2>&1"
+    su "$NORMAL_USER" -c "cd $YAY_DIRECTORY && makepkg -si --noconfirm > /dev/null 2>&1"
+    installed "yay"
+
+    sed -i '$d' /etc/sudoers ### Remove line added on sudoers file
 
 }
 
@@ -175,15 +177,15 @@ function banner(){
 }
 
 function checkConnection(){
-    echo -e "$LYELLOW [ * ]$BLUE Checking for internet connection$RESTORE"
+    echo -e "$LYELLOW [ * ]$RESTORE Checking for internet connection"
     sleep 1
     echo -e "GET http://google.com HTTP/1.0\n\n" | nc google.com 80 > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-        echo -e "$RED [ X ]$BLUE Internet Connection ➜$RED OFFLINE!$RESTORE\n";
+        echo -e "$RED [ X ]$RESTORE Internet Connection ➜$RED OFFLINE!\n";
         echo -e "$RED Sorry, you really need an internet connection....$RESTORE"
         exit 0
     else
-        echo -e "$GREEN [ ✔ ]$BLUE Internet Connection ➜$GREEN CONNECTED!$RESTORE\n";
+        echo -e "$GREEN [ ✔ ]$RESTORE Internet Connection ➜$GREEN CONNECTED!\n";
         sleep 1
     fi
 }
@@ -218,7 +220,6 @@ main(){
     checkSudo
     checkConnection
     execution
-    end
 }
 
 main
