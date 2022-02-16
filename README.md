@@ -1,24 +1,19 @@
-# Script for Arch Linux
+# Arch Linux Setup
 
-## These scripts can be changed to your preference, in order to speed up your installation.
+Script created in order to install and configure some tools used by me in Arch, either on the desktop or in WSL2
 
-Script created in order to install and configure some tools used by me in Arch, either on the desktop or in WSL2. 
+It can be changed for each case and need. Be aware if any module/driver is not compatible with your hardware [I'm using NVIDIA and AMD], or if you don't want something to be installed
+
+## Get Started
 
 1. Clone the repository or download the source code
 
+        git clone https://github.com/WeversonL/archlinux-setup.git 
 
-```
-git clone https://github.com/WeversonL/archlinux-setup.git 
-cd archlinux-setup
-```
 2. Run the script with sudo
 
-```
-sudo ./setup.sh
-```
+        sudo ./setup.sh
 
-## Check the script before running!! If a module is not compatible with your hardware [I'm use NVIDIA and AMD], or if you don't want that installation to be done.
-
-### Still in development
+⚠️ Still in development
 
 ![IMAGE](https://upload.wikimedia.org/wikipedia/commons/e/e8/NERD.png)
