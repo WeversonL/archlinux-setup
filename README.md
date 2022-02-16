@@ -10,8 +10,6 @@ Script created in order to install and configure some tools used by me in Arch, 
 ```
 git clone https://github.com/WeversonL/archlinux-setup.git 
 cd archlinux-setup
-
-
 ```
 2. Run the script with sudo
 
