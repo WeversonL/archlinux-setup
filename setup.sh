@@ -117,7 +117,7 @@ function execution(){
         groupadd docker > /dev/null 2>&1
     fi
 
-    usermod -aG docker "$NORMA_USER" && newgrp docker
+    usermod -aG docker "$NORMAL_USER" && newgrp docker
 
     # ----------------------------- MYSQL-CONFIG ----------------------------- #
 
@@ -137,7 +137,7 @@ YAY_URL="https://aur.archlinux.org/yay.git"
 
 YAY_DIRECTORY="$BUILD_DIRECTORY/yay"
 
-NORMA_USER=$(getent passwd 1000 | cut -d ":" -f1)
+NORMAL_USER=$(getent passwd 1000 | cut -d ":" -f1)
 
 # Colours Variables
 RESTORE='\033[0m'
@@ -206,3 +206,5 @@ main(){
     execution
     end
 }
+
+main
