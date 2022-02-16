@@ -9,7 +9,6 @@ ESSENTIALS=(
     nvidia-dkms
     nvidia-utils
     lib32-nvidia-utils
-    vim
     git
     curl
     wget
@@ -28,6 +27,7 @@ ESSENTIALS=(
     nmap
     whois
     tor
+    go
     jdk-openjdk
     maven
     mariadb
@@ -70,17 +70,15 @@ OPTIONALS=(
 
 function execution(){
 
-    # ----------------------------- EXECUTION ----------------------------- #
-
-    git clone "$YAY_URL" "$BUILD_DIRECTORY" > /dev/null 2>&1
-
     # ----------------------------- ENABLING MULTILIB ----------------------------- #
 
-    chmod 777 /etc/pacman.conf
-    echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-    chmod 644 /etc/pacman.conf
+    if ! pacman -Sy | grep "multilib" > /dev/null; then
+        chmod 777 /etc/pacman.conf
+        echo -e "[multilib]\nInclude = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+        chmod 644 /etc/pacman.conf
+    fi
 
-    pacman -S archlinux-keyring > /dev/null 2>&1
+    pacman -S archlinux-keyring --noconfirm > /dev/null 2>&1
     pacman -Syu --noconfirm > /dev/null 2>&1
 
     ### Install programs from essential list ###
@@ -107,9 +105,14 @@ function execution(){
 
     ### YAY ###
 
+    echo "$NORMAL_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers ### Add user nopasswd in sudoers
+
     install "yay"
-    cd "$YAY_DIRECTORY" && makepkg -si > /dev/null 2>&1
+    su "$NORMAL_USER" -c "git clone $YAY_URL $YAY_DIRECTORY > /dev/null 2>&1"
+    su "$NORMAL_USER" -c "cd $YAY_DIRECTORY && makepkg -si --noconfirm > /dev/null 2>&1"
     installed "yay"
+
+    sed -i '$d' /etc/sudoers ### Remove line added on sudoers file
 
     # ----------------------------- DOCKER-CONFIG ----------------------------- #
 
@@ -187,12 +190,12 @@ function checkConnection(){
 
 function install(){
     local programName=$1
-    echo -e "$BLUE [ * ]$LYELLOW $programName $RESTORE -> $BLUE Installing..."
+    echo -e "$CYAN ==>$RESTORE Installing $CYAN$programName$RESTORE...$RESTORE"
 }
 
 function installed(){
     local programName=$1
-    echo -e "$GREEN [ ✔ ]$GREEN $programName $RESTORE -> $BLUE INSTALLED\n"
+    echo -e "$GREEN ==>$RESTORE INSTALLED $CYAN$programName$RESTORE! $RESTORE\n"
 }
 
 function end(){
@@ -200,8 +203,19 @@ function end(){
     exit 0
 }
 
+function checkSudo(){
+    echo -e "$LYELLOW [ * ]$RESTORE Checking for sudo permission"
+    sleep 1
+    if (( $(id -u) != 0 )); then
+        echo -e "$RED [ X ]$RESTORE Please run as $LYELLOW=> SUDO$RESTORE\n";
+        exit
+    fi
+    echo -e "$GREEN [ ✔ ]$RESTORE Everything is $GREEN=> OK$RESTORE\n";
+}
+
 main(){
     banner
+    checkSudo
     checkConnection
     execution
     end
