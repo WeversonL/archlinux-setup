@@ -8,7 +8,8 @@ It can be changed for each case and need. Be aware if any module/driver is not c
 
 1. Clone the repository or download the source code
 
-        git clone https://github.com/WeversonL/archlinux-setup.git 
+        git clone https://github.com/WeversonL/archlinux-setup.git
+        cd archlinux-setup
 
 2. Run the script with sudo
 
