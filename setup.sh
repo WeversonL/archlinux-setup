@@ -105,21 +105,21 @@ function execution(){
 
     # ----------------------------- DOCKER-CONFIG ----------------------------- #
 
-    if ! groups | grep docker > /dev/null 2>&1; then
+    if ! getent group docker > /dev/null 2>&1; then
         groupadd docker > /dev/null 2>&1
     fi
 
     usermod -aG docker "$NORMAL_USER" && newgrp docker
+
+    # ----------------------------- CLEAN-CONFIG ----------------------------- #
+
+    pacman -Rns "$(pacman -Qtdq)" --noconfirm > /dev/null 2>&1
 
     # ----------------------------- MYSQL-CONFIG ----------------------------- #
 
     mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
     systemctl start mariadb
     mysql_secure_installation
-
-    # ----------------------------- CLEAN-CONFIG ----------------------------- #
-
-    pacman -Rns "$(pacman -Qtdq)" --noconfirm > /dev/null 2>&1
 
     # ----------------------------- YAY-INSTALL ----------------------------- #
 
@@ -137,11 +137,8 @@ function execution(){
 # ----------------------------- SCRIPT SETTINGS ----------------------------- #
 
 BUILD_DIRECTORY="/tmp"
-
-YAY_URL="https://aur.archlinux.org/yay.git"
-
 YAY_DIRECTORY="$BUILD_DIRECTORY/yay"
-
+YAY_URL="https://aur.archlinux.org/yay.git"
 NORMAL_USER=$(getent passwd 1000 | cut -d ":" -f1)
 
 # Colours Variables
